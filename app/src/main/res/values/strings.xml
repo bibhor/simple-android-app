@@ -7,4 +7,9 @@
     <string name="title_activity_searchable">SearchableActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string-array
+        name="allStrings">
+        <item>text_string</item>
+        <item>text_string2</item>
+    </string-array>
 </resources>

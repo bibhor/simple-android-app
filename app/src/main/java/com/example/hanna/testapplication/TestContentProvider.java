@@ -1,25 +1,12 @@
 package com.example.hanna.testapplication;
 
-import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.net.Uri;
-import android.provider.BaseColumns;
-import android.util.Log;
 
-import org.json.JSONArray;
-
-public class RCUContentProvider extends ContentProvider {
-    private MatrixCursor asyncCursor;
-    private static final String[] SEARCH_SUGGEST_COLUMNS = {
-            BaseColumns._ID,
-            SearchManager.SUGGEST_COLUMN_TEXT_1,
-            SearchManager.SUGGEST_COLUMN_INTENT_DATA
-    };
-
-    public RCUContentProvider() {
+public class TestContentProvider extends ContentProvider {
+    public TestContentProvider() {
     }
 
     @Override
@@ -44,26 +31,14 @@ public class RCUContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         // TODO: Implement this to initialize your content provider on startup.
-        asyncCursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 10);
-        return true;
+        return false;
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         // TODO: Implement this to handle query requests from clients.
-        String query = uri.getLastPathSegment().toLowerCase();
-
-        // Creates a new cursor when we get a HTTP response returns
-        MatrixCursor nCursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 10);
-        nCursor.addRow(new String[] {"1", "title1", "id 1"});
-        nCursor.addRow(new String[] {"2", "title2", "id 2"});
-
-        asyncCursor = nCursor;
-
-        return asyncCursor;
-        //adapter.swapCursor(matrixCursor);
-        //throw new UnsupportedOperationException("Not yet implemented");
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override

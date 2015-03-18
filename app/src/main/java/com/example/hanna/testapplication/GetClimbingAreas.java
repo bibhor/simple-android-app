@@ -16,6 +16,12 @@ import java.util.Iterator;
  * Created by hanna on 3/5/15.
  */
 public class GetClimbingAreas {
+    private ArrayList<Region> region_arr;
+    private ArrayList<Area> area_arr;
+    private ArrayList<Section> section_arr;
+    private ArrayList<Route> route_arr;
+
+    public GetClimbingAreas() {}
 
     public String parseData(InputStream s){
         StringBuilder buf=new StringBuilder();
@@ -29,9 +35,13 @@ public class GetClimbingAreas {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.setAllData(buf.toString());
-        Log.d("app", "CCCCCCCCCCCCCCCCCC" );
+        region_arr = new ArrayList<Region>();
+        area_arr = new ArrayList<Area>();
+        section_arr = new ArrayList<Section>();
 
+        this.setAllData(buf.toString());
+
+        Log.d("app", "zzzzzzzzzzzzz "+region_arr.toString()  );
         return buf.toString();
     }
 
@@ -43,15 +53,14 @@ public class GetClimbingAreas {
             JSONObject region = jObj.getJSONObject("county_region_latlon");
             this.setRegions(region);
 
-            /*JSONObject area_list = jObj.getJSONObject("area_list");
+            JSONObject area_list = jObj.getJSONObject("area_list");
             this.setAreas(area_list);
 
             JSONObject section_list = jObj.getJSONObject("section_list");
             this.setSections(area_list);
 
-            JSONObject route_list = jObj.getJSONObject("route_list");
+            /*JSONObject route_list = jObj.getJSONObject("route_list");
             this.setRoutes(area_list);*/
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -60,64 +69,78 @@ public class GetClimbingAreas {
     public void setRegions(JSONObject regions){
         Iterator<String> region_ids = regions.keys();
 
-        ArrayList<Region> region_arr = new ArrayList<Region>();
+
 
         while( region_ids.hasNext() ) {
             String key = region_ids.next();
             try {
-                //Object region = regions.get(key);
                 JSONObject jobj = regions.getJSONObject(key);
 
                 Region r = new Region();
-                r.setGuid(jobj.getString("guid"));
+                r.setGuid(key);
                 r.setName(jobj.getString("name"));
+                region_arr.add(r);
             } catch (JSONException e) {
                 // Something went wrong!
+                Log.d("app", "EEEEEEEEEEEEEEEEEE  "+e.getMessage());
             }
         }
     }
 
-    public void setArea(JSONObject areas){
+    public void setAreas(JSONObject areas){
         Iterator<String> area_ids = areas.keys();
 
         while( area_ids.hasNext() ) {
             String key = area_ids.next();
             try {
-                //Object area = areas.get(key);
-                //Object region = regions.get(key);
                 JSONObject jobj = areas.getJSONObject(key);
 
-                Region r = new Region();
-                r.setGuid(jobj.getString("guid"));
-                r.setName(jobj.getString("name"));
+                Area a = new Area();
+                a.setGuid(key);
+                a.setName(jobj.getString("name"));
+                a.setLatlon(jobj.getString("latlon"));
+                area_arr.add(a);
+            } catch (JSONException e) {
+                // Something went wrong!
+                Log.d("app", "iiiiiiiiiiiiiiiiii  "+e.getMessage());
+            }
+        }
+    }
+    public void setSections(JSONObject sections){
+        Iterator<String> section_ids = sections.keys();
+
+        while( section_ids.hasNext() ) {
+            String key = section_ids.next();
+            try {
+                JSONObject jobj = sections.getJSONObject(key);
+                Section s = new Section();
+                s.setGuid(jobj.getString("guid"));
+                s.setName(jobj.getString("name"));
+                section_arr.add(s);
             } catch (JSONException e) {
                 // Something went wrong!
             }
         }
     }
-    public void setSectionList(JSONObject sectionlist){
-        Iterator<String> sections = sectionlist.keys();
 
-        while( sections.hasNext() ) {
-            String key = sections.next();
+    public void setRoutes(JSONObject routes){
+        Iterator<String> route_ids = routes.keys();
+
+        while( route_ids.hasNext() ) {
+            String key = route_ids.next();
             try {
-                Object section = sectionlist.get(key);
+                JSONObject jobj = routes.getJSONObject(key);
             } catch (JSONException e) {
                 // Something went wrong!
             }
         }
     }
 
-    public void setRouteList(JSONObject routelist){
-        Iterator<String> routes = routelist.keys();
+    public ArrayList<Area> getArea_arr() {
+        return area_arr;
+    }
 
-        while( routes.hasNext() ) {
-            String key = routes.next();
-            try {
-                Object route = routelist.get(key);
-            } catch (JSONException e) {
-                // Something went wrong!
-            }
-        }
+    public void setArea_arr(ArrayList<Area> area_arr) {
+        this.area_arr = area_arr;
     }
 }
