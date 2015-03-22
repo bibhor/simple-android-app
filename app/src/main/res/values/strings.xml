@@ -12,4 +12,5 @@
         <item>text_string</item>
         <item>text_string2</item>
     </string-array>
+    <string name="title_activity_searchable_list">SearchableList</string>
 </resources>

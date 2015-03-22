@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -33,19 +32,13 @@
                 android:value="splitActionBarWhenNarrow" />
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".MainActivity" />
+                android:value=".SearchableActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
         </activity>
 
         <provider
@@ -55,6 +48,17 @@
             android:exported="true" >
         </provider>
 
+        <activity
+            android:name=".SearchableActivity"
+            android:label="@string/title_activity_searchable_list" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
     </application>
 
 </manifest>

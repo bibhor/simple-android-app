@@ -1,0 +1,1001 @@
+Index: app/src/main/java/com/example/hanna/testapplication/Area.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/Area.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/Area.java	(revision )
+@@ -0,0 +1,8 @@
++package com.example.hanna.testapplication;
++
++/**
++ * Created by hanna on 3/13/15.
++ */
++public class Area {
++
++}
+Index: app/src/main/java/com/example/hanna/testapplication/Route.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/Route.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/Route.java	(revision )
+@@ -0,0 +1,7 @@
++package com.example.hanna.testapplication;
++
++/**
++ * Created by hanna on 3/13/15.
++ */
++public class Route {
++}
+Index: app/src/main/java/com/example/hanna/testapplication/Region.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/Region.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/Region.java	(revision )
+@@ -0,0 +1,26 @@
++package com.example.hanna.testapplication;
++
++/**
++ * Created by hanna on 3/13/15.
++ */
++public class Region {
++    private String guid;
++    private String name;
++
++
++    public void setGuid(String guid) {
++        this.guid = guid;
++    }
++
++    public void setName(String name) {
++        this.name = name;
++    }
++
++    public String getGuid() {
++        return this.guid;
++    }
++
++    public String getName() {
++        return this.name;
++    }
++}
+Index: app/src/main/java/com/example/hanna/testapplication/Section.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/Section.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/Section.java	(revision )
+@@ -0,0 +1,7 @@
++package com.example.hanna.testapplication;
++
++/**
++ * Created by hanna on 3/13/15.
++ */
++public class Section {
++}
+Index: app/src/main/java/com/example/hanna/testapplication/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/MainActivity.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/MainActivity.java	(revision )
+@@ -0,0 +1,164 @@
++package com.example.hanna.testapplication;
++
++import android.app.SearchManager;
++import android.content.Context;
++import android.os.AsyncTask;
++import android.support.v7.app.ActionBarActivity;
++import android.support.v7.app.ActionBar;
++import android.support.v4.app.Fragment;
++import android.os.Bundle;
++import android.support.v7.widget.SearchView;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.Menu;
++import android.view.MenuInflater;
++import android.view.MenuItem;
++import android.view.View;
++import android.view.ViewGroup;
++import android.os.Build;
++
++import com.google.android.gms.maps.*;
++import com.google.android.gms.maps.model.*;
++
++import org.json.JSONObject;
++
++import java.io.BufferedReader;
++import java.io.IOException;
++import java.io.InputStream;
++import java.io.InputStreamReader;
++import java.io.UnsupportedEncodingException;
++
++
++public class MainActivity extends ActionBarActivity implements OnMapReadyCallback {
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_main);
++        if (savedInstanceState == null) {
++            getSupportFragmentManager().beginTransaction()
++                    .add(R.id.container, new PlaceholderFragment())
++                    .commit();
++        }
++        MapFragment mapFragment = (MapFragment) getFragmentManager()
++                .findFragmentById(R.id.map);
++        mapFragment.getMapAsync(this);
++
++        /*Thread thread = new Thread(new Runnable() {
++                @Override
++                public void run() {
++                    try {
++                        InputStream json=getAssets().open("small.json");
++                        GetClimbingAreas a = new GetClimbingAreas();
++                        a.getClimbing(json);
++                    } catch (Exception e) {
++                        e.printStackTrace();
++                    }
++                }
++            });
++        thread.start();*/
++    }
++
++    @Override
++    public boolean onCreateOptionsMenu(Menu menu) {
++        // Inflate the menu; this adds items to the action bar if it is present.
++        //getMenuInflater().inflate(R.menu.main_activity_actions, menu);
++        //menu.findItem(R.id.action_search).getActionView();
++
++       
++
++        MenuInflater inflater = getMenuInflater();
++        inflater.inflate(R.menu.main_activity_actions, menu);
++        // Get the SearchView and set the searchable configuration
++        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
++        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
++        // Assumes current activity is the searchable activity
++        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
++
++        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
++
++        return true;
++    }
++
++    @Override
++    public boolean onOptionsItemSelected(MenuItem item) {
++        // Handle action bar item clicks here. The action bar will
++        // automatically handle clicks on the Home/Up button, so long
++        // as you specify a parent activity in AndroidManifest.xml.
++        int id = item.getItemId();
++
++        // Handle presses on the action bar items
++        switch (item.getItemId()) {
++            case R.id.action_search:
++                //openSearch();
++                return true;
++            case R.id.action_advanced_search:
++                //Open advanced search
++                //composeMessage();
++                return true;
++            default:
++                return super.onOptionsItemSelected(item);
++        }
++        //return super.onOptionsItemSelected(item);
++    }
++
++    @Override
++    public void onMapReady(GoogleMap map) {
++
++        new LoadClimbingAreas().execute("test");
++
++        /*LatLng sydney = new LatLng(-33.867, 151.206);
++
++        //map.setMyLocationEnabled(true);
++        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
++
++        map.addMarker(new MarkerOptions()
++                .title("Sydney")
++                .snippet("The most populous city in Australia.")
++                .position(sydney));*/
++    }
++
++    private class LoadClimbingAreas extends AsyncTask<String, Void, String> {
++
++        /** The system calls this to perform work in the UI thread and delivers
++         * the result from doInBackground() */
++        protected void onPostExecute(String result) {
++
++        }
++
++        @Override
++        protected String doInBackground(String... params) {
++            try {
++                InputStream json=getAssets().open("small.json");
++                GetClimbingAreas a = new GetClimbingAreas();
++                a.parseData(json);
++            } catch (Exception e) {
++                e.printStackTrace();
++            }
++            return "sss";
++        }
++    }
++
++    @Override
++    public boolean onSearchRequested() {
++        //pauseSomeStuff();
++        Log.d("app", "SEARCH uUUUUUUUUUUUUUUUU" );
++        return super.onSearchRequested();
++    }
++
++    /**
++     * A placeholder fragment containing a simple view.
++     */
++    public static class PlaceholderFragment extends Fragment {
++
++        public PlaceholderFragment() {
++        }
++
++        @Override
++        public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                                 Bundle savedInstanceState) {
++            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
++            return rootView;
++        }
++    }
++}
+Index: app/src/main/java/com/example/hanna/testapplication/RCUContentProvider.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/RCUContentProvider.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/RCUContentProvider.java	(revision )
+@@ -0,0 +1,62 @@
++package com.example.hanna.testapplication;
++
++import android.content.ContentProvider;
++import android.content.ContentValues;
++import android.database.Cursor;
++import android.database.MatrixCursor;
++import android.net.Uri;
++import android.util.Log;
++
++public class RCUContentProvider extends ContentProvider {
++    public RCUContentProvider() {
++    }
++
++    @Override
++    public int delete(Uri uri, String selection, String[] selectionArgs) {
++        // Implement this to handle requests to delete one or more rows.
++        throw new UnsupportedOperationException("Not yet implemented");
++    }
++
++    @Override
++    public String getType(Uri uri) {
++        // TODO: Implement this to handle requests for the MIME type of the data
++        // at the given URI.
++        throw new UnsupportedOperationException("Not yet implemented");
++    }
++
++    @Override
++    public Uri insert(Uri uri, ContentValues values) {
++        // TODO: Implement this to handle requests to insert a new row.
++        throw new UnsupportedOperationException("Not yet implemented");
++    }
++
++    @Override
++    public boolean onCreate() {
++        // TODO: Implement this to initialize your content provider on startup.
++        return false;
++    }
++
++    @Override
++    public Cursor query(Uri uri, String[] projection, String selection,
++                        String[] selectionArgs, String sortOrder) {
++        // TODO: Implement this to handle query requests from clients.
++        String query = uri.getLastPathSegment().toLowerCase();
++        Log.d("app", "AAAAAAAAAAAAA "+query);
++
++        String[] columnNames = {"_id", "Column1", "Column2"};
++        MatrixCursor matrixCursor = new MatrixCursor(columnNames);
++        matrixCursor.addRow(new String[]{"1", "r1v1", "r1v2"});
++        matrixCursor.addRow(new String[]{"1", "r2v1", "r2v2"});
++
++        return matrixCursor;
++        //adapter.swapCursor(matrixCursor);
++        //throw new UnsupportedOperationException("Not yet implemented");
++    }
++
++    @Override
++    public int update(Uri uri, ContentValues values, String selection,
++                      String[] selectionArgs) {
++        // TODO: Implement this to handle requests to update one or more rows.
++        throw new UnsupportedOperationException("Not yet implemented");
++    }
++}
+Index: app/src/main/java/com/example/hanna/testapplication/SearchableActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/SearchableActivity.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/SearchableActivity.java	(revision )
+@@ -0,0 +1,68 @@
++package com.example.hanna.testapplication;
++
++import android.app.ListActivity;
++import android.app.SearchManager;
++import android.content.Intent;
++import android.net.Uri;
++import android.support.v7.app.ActionBarActivity;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.Menu;
++import android.view.MenuItem;
++import android.widget.ListView;
++
++
++public class SearchableActivity extends ListActivity {
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_searchable);
++        Log.d("app", "NNNNNNNNNNNNNN");
++        // Get the intent, verify the action and get the query
++        Intent intent = getIntent();
++        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
++            String query = intent.getStringExtra(SearchManager.QUERY);
++            doMySearch(query);
++        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
++            // Handle a suggestions click (because the suggestions all use ACTION_VIEW)
++            Uri data = intent.getData();
++            //showResult(data);
++        }
++    }
++
++    private void handleIntent(Intent intent) {
++        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
++            String query = intent.getStringExtra(SearchManager.QUERY);
++            doMySearch(query);
++        }
++    }
++
++
++    private void doMySearch(String query) {
++        Log.d("app", "SEARCH XXXXXXXXXXXX "+query );
++    }
++
++
++    @Override
++    public boolean onCreateOptionsMenu(Menu menu) {
++        // Inflate the menu; this adds items to the action bar if it is present.
++        getMenuInflater().inflate(R.menu.menu_searchable, menu);
++        return true;
++    }
++
++    @Override
++    public boolean onOptionsItemSelected(MenuItem item) {
++        // Handle action bar item clicks here. The action bar will
++        // automatically handle clicks on the Home/Up button, so long
++        // as you specify a parent activity in AndroidManifest.xml.
++        int id = item.getItemId();
++
++        //noinspection SimplifiableIfStatement
++        if (id == R.id.action_settings) {
++            return true;
++        }
++
++        return super.onOptionsItemSelected(item);
++    }
++}
+Index: app/src/main/java/com/example/hanna/testapplication/model/Area.java
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/model/Area.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/model/Area.java	(revision )
+@@ -1,34 +0,0 @@
+-package com.example.hanna.testapplication.model;
+-
+-/**
+- * Created by hanna on 3/13/15.
+- */
+-public class Area {
+-    private String guid;
+-    private String name;
+-    private String latlon;
+-
+-    public String[] getLatlon() {
+-        return latlon.split(",",2);
+-    }
+-
+-    public void setLatlon(String latlon) {
+-        this.latlon = latlon;
+-    }
+-
+-    public void setGuid(String guid) {
+-        this.guid = guid;
+-    }
+-
+-    public void setName(String name) {
+-        this.name = name;
+-    }
+-
+-    public String getGuid() {
+-        return this.guid;
+-    }
+-
+-    public String getName() {
+-        return this.name;
+-    }
+-}
+Index: app/src/main/java/com/example/hanna/testapplication/model/Route.java
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/model/Route.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/model/Route.java	(revision )
+@@ -1,7 +0,0 @@
+-package com.example.hanna.testapplication.model;
+-
+-/**
+- * Created by hanna on 3/13/15.
+- */
+-public class Route {
+-}
+Index: app/src/main/java/com/example/hanna/testapplication/model/Region.java
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/model/Region.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/model/Region.java	(revision )
+@@ -1,34 +0,0 @@
+-package com.example.hanna.testapplication.model;
+-
+-/**
+- * Created by hanna on 3/13/15.
+- */
+-public class Region {
+-    private String guid;
+-    private String name;
+-    private String[] latlon;
+-
+-    public String[] getLatlon() {
+-        return latlon;
+-    }
+-
+-    public void setLatlon(String[] latlon) {
+-        this.latlon = latlon;
+-    }
+-
+-    public void setGuid(String guid) {
+-        this.guid = guid;
+-    }
+-
+-    public void setName(String name) {
+-        this.name = name;
+-    }
+-
+-    public String getGuid() {
+-        return this.guid;
+-    }
+-
+-    public String getName() {
+-        return this.name;
+-    }
+-}
+Index: app/src/main/java/com/example/hanna/testapplication/model/Section.java
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/model/Section.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/model/Section.java	(revision )
+@@ -1,27 +0,0 @@
+-package com.example.hanna.testapplication.model;
+-
+-/**
+- * Created by hanna on 3/13/15.
+- */
+-public class Section {
+-    private String guid;
+-    private String name;
+-
+-
+-    public void setGuid(String guid) {
+-        this.guid = guid;
+-    }
+-
+-    public void setName(String name) {
+-        this.name = name;
+-    }
+-
+-    public String getGuid() {
+-        return this.guid;
+-    }
+-
+-    public String getName() {
+-        return this.name;
+-    }
+-
+-}
+Index: app/src/main/java/com/example/hanna/testapplication/activity/MainActivity.java
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/activity/MainActivity.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/activity/MainActivity.java	(revision )
+@@ -1,177 +0,0 @@
+-package com.example.hanna.testapplication.activity;
+-
+-import android.app.SearchManager;
+-import android.content.Context;
+-import android.content.Intent;
+-import android.net.Uri;
+-import android.os.AsyncTask;
+-import android.support.v7.app.ActionBarActivity;
+-import android.support.v4.app.Fragment;
+-import android.os.Bundle;
+-import android.support.v7.widget.SearchView;
+-import android.util.Log;
+-import android.view.LayoutInflater;
+-import android.view.Menu;
+-import android.view.MenuInflater;
+-import android.view.MenuItem;
+-import android.view.View;
+-import android.view.ViewGroup;
+-
+-import com.example.hanna.testapplication.GetClimbingAreas;
+-import com.example.hanna.testapplication.R;
+-import com.example.hanna.testapplication.model.Area;
+-import com.google.android.gms.maps.*;
+-import com.google.android.gms.maps.model.LatLng;
+-import com.google.android.gms.maps.model.MarkerOptions;
+-
+-import java.io.InputStream;
+-
+-
+-public class MainActivity extends ActionBarActivity implements OnMapReadyCallback {
+-    private GetClimbingAreas climbingareas;
+-    public GoogleMap map;
+-
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        Intent intent = getIntent();
+-        Log.d("app", "ttttttttttttttttttttttt  "+intent.getAction().toString());
+-        setContentView(R.layout.activity_main);
+-        if (savedInstanceState == null) {
+-            getSupportFragmentManager().beginTransaction()
+-                    .add(R.id.container, new PlaceholderFragment())
+-                    .commit();
+-        }
+-        if (Intent.ACTION_MAIN.equals(intent.getAction())) {
+-            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+-            mapFragment.getMapAsync(this);
+-        }else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+-            String query = intent.getStringExtra(SearchManager.QUERY);
+-            Log.d("app", "a1a1a1a1a1a1a1a1a  ");
+-            //doMySearch(query);
+-        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+-            // Handle a suggestions click (because the suggestions all use ACTION_VIEW)
+-            Uri data = intent.getData();
+-            Log.d("app", "b1b1b1b1b1b1b1b1b  ");
+-            //showResult(data);
+-        }
+-    }
+-
+-    @Override
+-    public boolean onCreateOptionsMenu(Menu menu) {
+-        // Inflate the menu; this adds items to the action bar if it is present.
+-        //getMenuInflater().inflate(R.menu.main_activity_actions, menu);
+-        //menu.findItem(R.id.action_search).getActionView();
+-
+-        // Inflate the options menu from XML
+-        MenuInflater inflater = getMenuInflater();
+-        inflater.inflate(R.menu.main_activity_actions, menu);
+-        // Get the SearchView and set the searchable configuration
+-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+-        // Assumes current activity is the searchable activity
+-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+-
+-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+-
+-        return true;
+-    }
+-
+-    @Override
+-    public boolean onOptionsItemSelected(MenuItem item) {
+-        // Handle action bar item clicks here. The action bar will
+-        // automatically handle clicks on the Home/Up button, so long
+-        // as you specify a parent activity in AndroidManifest.xml.
+-        int id = item.getItemId();
+-
+-        // Handle presses on the action bar items
+-        switch (item.getItemId()) {
+-            case R.id.action_search:
+-                //openSearch();
+-                return true;
+-            case R.id.action_advanced_search:
+-                //Open advanced search
+-                //composeMessage();
+-                return true;
+-            default:
+-                return super.onOptionsItemSelected(item);
+-        }
+-        //return super.onOptionsItemSelected(item);
+-    }
+-
+-    @Override
+-    public void onMapReady(GoogleMap m) {
+-        climbingareas = new GetClimbingAreas();
+-        this.map = m;
+-        new LoadClimbingAreas().execute(climbingareas);
+-
+-        //LatLng sydney = new LatLng(-33.867, 151.206);
+-
+-        //map.setMyLocationEnabled(true);
+-        /*map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+-
+-        map.addMarker(new MarkerOptions()
+-                .title("Sydney")
+-                .snippet("The most populous city in Australia.")
+-                .position(sydney));*/
+-    }
+-    public void showAreaMarkers()
+-    {
+-        LatLng utah = new LatLng(39.37, -112.02);
+-        map.setMyLocationEnabled(true);
+-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(utah, 7));
+-        Area a = climbingareas.getArea_arr().get(0);
+-        String[] ll = a.getLatlon();
+-
+-        LatLng a1 = new LatLng(Double.parseDouble(ll[0]), Double.parseDouble(ll[1]));
+-
+-        map.addMarker(new MarkerOptions()
+-                .title("Sydney")
+-                .snippet("The most populous city in Australia.")
+-                .position(a1));
+-    }
+-
+-    //public
+-    private class LoadClimbingAreas extends AsyncTask<GetClimbingAreas, Void, GetClimbingAreas> {
+-
+-        /** The system calls this to perform work in the UI thread and delivers
+-         * the result from doInBackground() */
+-        protected void onPostExecute(GetClimbingAreas result) {
+-            //getArea_arr
+-            showAreaMarkers();
+-        }
+-
+-        @Override
+-        protected GetClimbingAreas doInBackground(GetClimbingAreas... a) {
+-            GetClimbingAreas _getclimbingarea = a[0];
+-            try {
+-                InputStream json=getAssets().open("small.json");
+-                _getclimbingarea.parseData(json);
+-            } catch (Exception e) {
+-                e.printStackTrace();
+-            }
+-            return _getclimbingarea;
+-        }
+-    }
+-
+-    @Override
+-    public boolean onSearchRequested() {
+-        return super.onSearchRequested();
+-    }
+-
+-    /**
+-     * A placeholder fragment containing a simple view.
+-     */
+-    public static class PlaceholderFragment extends Fragment {
+-
+-        public PlaceholderFragment() {
+-        }
+-
+-        @Override
+-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+-                                 Bundle savedInstanceState) {
+-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+-            return rootView;
+-        }
+-    }
+-}
+Index: app/src/main/java/com/example/hanna/testapplication/contentprovider/RCUContentProvider.java
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/contentprovider/RCUContentProvider.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/contentprovider/RCUContentProvider.java	(revision )
+@@ -1,75 +0,0 @@
+-package com.example.hanna.testapplication.contentprovider;
+-
+-import android.app.SearchManager;
+-import android.content.ContentProvider;
+-import android.content.ContentValues;
+-import android.database.Cursor;
+-import android.database.MatrixCursor;
+-import android.net.Uri;
+-import android.provider.BaseColumns;
+-import android.util.Log;
+-
+-import org.json.JSONArray;
+-
+-public class RCUContentProvider extends ContentProvider {
+-    private MatrixCursor asyncCursor;
+-    private static final String[] SEARCH_SUGGEST_COLUMNS = {
+-            BaseColumns._ID,
+-            SearchManager.SUGGEST_COLUMN_TEXT_1,
+-            SearchManager.SUGGEST_COLUMN_INTENT_DATA
+-    };
+-
+-    public RCUContentProvider() {
+-    }
+-
+-    @Override
+-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+-        // Implement this to handle requests to delete one or more rows.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-
+-    @Override
+-    public String getType(Uri uri) {
+-        // TODO: Implement this to handle requests for the MIME type of the data
+-        // at the given URI.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-
+-    @Override
+-    public Uri insert(Uri uri, ContentValues values) {
+-        // TODO: Implement this to handle requests to insert a new row.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-
+-    @Override
+-    public boolean onCreate() {
+-        // TODO: Implement this to initialize your content provider on startup.
+-        asyncCursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 10);
+-        return true;
+-    }
+-
+-    @Override
+-    public Cursor query(Uri uri, String[] projection, String selection,
+-                        String[] selectionArgs, String sortOrder) {
+-        // TODO: Implement this to handle query requests from clients.
+-        String query = uri.getLastPathSegment().toLowerCase();
+-
+-        // Creates a new cursor when we get a HTTP response returns
+-        MatrixCursor nCursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 10);
+-        nCursor.addRow(new String[] {"1", "title1", "id 1"});
+-        nCursor.addRow(new String[] {"2", "title2", "id 2"});
+-
+-        asyncCursor = nCursor;
+-
+-        return asyncCursor;
+-        //adapter.swapCursor(matrixCursor);
+-        //throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-
+-    @Override
+-    public int update(Uri uri, ContentValues values, String selection,
+-                      String[] selectionArgs) {
+-        // TODO: Implement this to handle requests to update one or more rows.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-}
+Index: app/src/main/java/com/example/hanna/testapplication/contentprovider/TestContentProvider.java
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/contentprovider/TestContentProvider.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/contentprovider/TestContentProvider.java	(revision )
+@@ -1,50 +0,0 @@
+-package com.example.hanna.testapplication.contentprovider;
+-
+-import android.content.ContentProvider;
+-import android.content.ContentValues;
+-import android.database.Cursor;
+-import android.net.Uri;
+-
+-public class TestContentProvider extends ContentProvider {
+-    public TestContentProvider() {
+-    }
+-
+-    @Override
+-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+-        // Implement this to handle requests to delete one or more rows.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-
+-    @Override
+-    public String getType(Uri uri) {
+-        // TODO: Implement this to handle requests for the MIME type of the data
+-        // at the given URI.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-
+-    @Override
+-    public Uri insert(Uri uri, ContentValues values) {
+-        // TODO: Implement this to handle requests to insert a new row.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-
+-    @Override
+-    public boolean onCreate() {
+-        // TODO: Implement this to initialize your content provider on startup.
+-        return false;
+-    }
+-
+-    @Override
+-    public Cursor query(Uri uri, String[] projection, String selection,
+-                        String[] selectionArgs, String sortOrder) {
+-        // TODO: Implement this to handle query requests from clients.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-
+-    @Override
+-    public int update(Uri uri, ContentValues values, String selection,
+-                      String[] selectionArgs) {
+-        // TODO: Implement this to handle requests to update one or more rows.
+-        throw new UnsupportedOperationException("Not yet implemented");
+-    }
+-}
+Index: app/src/main/java/com/example/hanna/testapplication/GetClimbingAreas.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/hanna/testapplication/GetClimbingAreas.java	(revision )
++++ app/src/main/java/com/example/hanna/testapplication/GetClimbingAreas.java	(revision )
+@@ -2,11 +2,6 @@
+ 
+ import android.util.Log;
+ 
+-import com.example.hanna.testapplication.model.Area;
+-import com.example.hanna.testapplication.model.Region;
+-import com.example.hanna.testapplication.model.Route;
+-import com.example.hanna.testapplication.model.Section;
+-
+ import org.json.JSONException;
+ import org.json.JSONObject;
+ 
+@@ -21,13 +16,7 @@
+  * Created by hanna on 3/5/15.
+  */
+ public class GetClimbingAreas {
+-    private ArrayList<Region> region_arr;
+-    private ArrayList<Area> area_arr;
+-    private ArrayList<Section> section_arr;
+-    private ArrayList<Route> route_arr;
+ 
+-    public GetClimbingAreas() {}
+-
+     public String parseData(InputStream s){
+         StringBuilder buf=new StringBuilder();
+         String str;
+@@ -40,13 +29,9 @@
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+-        region_arr = new ArrayList<Region>();
+-        area_arr = new ArrayList<Area>();
+-        section_arr = new ArrayList<Section>();
+-
+         this.setAllData(buf.toString());
++        Log.d("app", "CCCCCCCCCCCCCCCCCC" );
+ 
+-        Log.d("app", "zzzzzzzzzzzzz "+region_arr.toString()  );
+         return buf.toString();
+     }
+ 
+@@ -58,14 +43,15 @@
+             JSONObject region = jObj.getJSONObject("county_region_latlon");
+             this.setRegions(region);
+ 
+-            JSONObject area_list = jObj.getJSONObject("area_list");
++            /*JSONObject area_list = jObj.getJSONObject("area_list");
+             this.setAreas(area_list);
+ 
+             JSONObject section_list = jObj.getJSONObject("section_list");
+             this.setSections(area_list);
+ 
+-            /*JSONObject route_list = jObj.getJSONObject("route_list");
++            JSONObject route_list = jObj.getJSONObject("route_list");
+             this.setRoutes(area_list);*/
++
+         } catch (JSONException e) {
+             e.printStackTrace();
+         }
+@@ -74,78 +60,64 @@
+     public void setRegions(JSONObject regions){
+         Iterator<String> region_ids = regions.keys();
+ 
++        ArrayList<Region> region_arr = new ArrayList<Region>();
+ 
+-
+         while( region_ids.hasNext() ) {
+             String key = region_ids.next();
+             try {
++                //Object region = regions.get(key);
+                 JSONObject jobj = regions.getJSONObject(key);
+ 
+                 Region r = new Region();
+-                r.setGuid(key);
++                r.setGuid(jobj.getString("guid"));
+                 r.setName(jobj.getString("name"));
+-                region_arr.add(r);
+             } catch (JSONException e) {
+                 // Something went wrong!
+-                Log.d("app", "EEEEEEEEEEEEEEEEEE  "+e.getMessage());
+             }
+         }
+     }
+ 
+-    public void setAreas(JSONObject areas){
++    public void setArea(JSONObject areas){
+         Iterator<String> area_ids = areas.keys();
+ 
+         while( area_ids.hasNext() ) {
+             String key = area_ids.next();
+             try {
++                //Object area = areas.get(key);
++                //Object region = regions.get(key);
+                 JSONObject jobj = areas.getJSONObject(key);
+ 
+-                Area a = new Area();
+-                a.setGuid(key);
+-                a.setName(jobj.getString("name"));
+-                a.setLatlon(jobj.getString("latlon"));
+-                area_arr.add(a);
++                Region r = new Region();
++                r.setGuid(jobj.getString("guid"));
++                r.setName(jobj.getString("name"));
+             } catch (JSONException e) {
+                 // Something went wrong!
+-                Log.d("app", "iiiiiiiiiiiiiiiiii  "+e.getMessage());
+             }
+         }
+     }
+-    public void setSections(JSONObject sections){
+-        Iterator<String> section_ids = sections.keys();
++    public void setSectionList(JSONObject sectionlist){
++        Iterator<String> sections = sectionlist.keys();
+ 
+-        while( section_ids.hasNext() ) {
+-            String key = section_ids.next();
++        while( sections.hasNext() ) {
++            String key = sections.next();
+             try {
+-                JSONObject jobj = sections.getJSONObject(key);
+-                Section s = new Section();
+-                s.setGuid(jobj.getString("guid"));
+-                s.setName(jobj.getString("name"));
+-                section_arr.add(s);
++                Object section = sectionlist.get(key);
+             } catch (JSONException e) {
+                 // Something went wrong!
+             }
+         }
+     }
+ 
+-    public void setRoutes(JSONObject routes){
+-        Iterator<String> route_ids = routes.keys();
++    public void setRouteList(JSONObject routelist){
++        Iterator<String> routes = routelist.keys();
+ 
+-        while( route_ids.hasNext() ) {
+-            String key = route_ids.next();
++        while( routes.hasNext() ) {
++            String key = routes.next();
+             try {
+-                JSONObject jobj = routes.getJSONObject(key);
++                Object route = routelist.get(key);
+             } catch (JSONException e) {
+                 // Something went wrong!
+             }
+         }
+-    }
+-
+-    public ArrayList<Area> getArea_arr() {
+-        return area_arr;
+-    }
+-
+-    public void setArea_arr(ArrayList<Area> area_arr) {
+-        this.area_arr = area_arr;
+     }
+ }

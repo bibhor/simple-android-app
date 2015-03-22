@@ -9,8 +9,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import org.json.JSONArray;
-
 public class RCUContentProvider extends ContentProvider {
     private MatrixCursor asyncCursor;
     private static final String[] SEARCH_SUGGEST_COLUMNS = {
@@ -53,14 +51,12 @@ public class RCUContentProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         // TODO: Implement this to handle query requests from clients.
         String query = uri.getLastPathSegment().toLowerCase();
-
         // Creates a new cursor when we get a HTTP response returns
         MatrixCursor nCursor = new MatrixCursor(SEARCH_SUGGEST_COLUMNS, 10);
         nCursor.addRow(new String[] {"1", "title1", "id 1"});
         nCursor.addRow(new String[] {"2", "title2", "id 2"});
 
         asyncCursor = nCursor;
-
         return asyncCursor;
         //adapter.swapCursor(matrixCursor);
         //throw new UnsupportedOperationException("Not yet implemented");

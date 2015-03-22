@@ -6,15 +6,7 @@ package com.example.hanna.testapplication;
 public class Region {
     private String guid;
     private String name;
-    private String[] latlon;
 
-    public String[] getLatlon() {
-        return latlon;
-    }
-
-    public void setLatlon(String[] latlon) {
-        this.latlon = latlon;
-    }
 
     public void setGuid(String guid) {
         this.guid = guid;
