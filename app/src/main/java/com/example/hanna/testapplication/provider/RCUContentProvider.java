@@ -1,4 +1,4 @@
-package com.example.hanna.testapplication;
+package com.example.hanna.testapplication.provider;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;

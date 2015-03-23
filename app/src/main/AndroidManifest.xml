@@ -24,7 +24,7 @@
             android:value="AIzaSyBRiTMf8kZR-5rifYFaYB90_5y99eueBic" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light" >
             <meta-data
@@ -42,7 +42,7 @@
         </activity>
 
         <provider
-            android:name=".RCUContentProvider"
+            android:name=".provider.RCUContentProvider"
             android:authorities="com.example.hanna.testapplication"
             android:enabled="true"
             android:exported="true" >

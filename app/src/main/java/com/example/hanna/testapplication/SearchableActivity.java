@@ -12,13 +12,13 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 
-public class SearchableActivity extends ActionBarActivity {
+public class SearchableActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchable);
-        Log.d("app", "NNNNNNNNNNNNNN");
+
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {

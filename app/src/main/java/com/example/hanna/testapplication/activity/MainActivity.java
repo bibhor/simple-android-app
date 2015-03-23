@@ -1,10 +1,9 @@
-package com.example.hanna.testapplication;
+package com.example.hanna.testapplication.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -15,21 +14,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 
+import com.example.hanna.testapplication.R;
+import com.example.hanna.testapplication.model.Area;
+import com.example.hanna.testapplication.model.GetClimbingAreas;
 import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 
 public class MainActivity extends ActionBarActivity implements OnMapReadyCallback {
+    private GetClimbingAreas climbingareas;
+    public GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,28 +42,10 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        /*Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        InputStream json=getAssets().open("small.json");
-                        GetClimbingAreas a = new GetClimbingAreas();
-                        a.getClimbing(json);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        thread.start();*/
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main_activity_actions, menu);
-        //menu.findItem(R.id.action_search).getActionView();
-
-
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity_actions, menu);
@@ -103,39 +83,48 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
+    public void onMapReady(GoogleMap m) {
+        climbingareas = new GetClimbingAreas();
+        this.map = m;
+        new LoadClimbingAreas().execute(climbingareas);
+    }
 
-        new LoadClimbingAreas().execute("test");
+    public void showAreaMarkers()
+    {
+        LatLng utah = new LatLng(39.37, -112.02);
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(utah, 7));
+        Area a = climbingareas.getArea_arr().get(0);
+        String[] ll = a.getLatlon();
 
-        /*LatLng sydney = new LatLng(-33.867, 151.206);
-
-        //map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+        LatLng a1 = new LatLng(Double.parseDouble(ll[0]), Double.parseDouble(ll[1]));
 
         map.addMarker(new MarkerOptions()
                 .title("Sydney")
                 .snippet("The most populous city in Australia.")
-                .position(sydney));*/
+                .position(a1));
     }
 
-    private class LoadClimbingAreas extends AsyncTask<String, Void, String> {
+    //public
+    private class LoadClimbingAreas extends AsyncTask<GetClimbingAreas, Void, GetClimbingAreas> {
 
         /** The system calls this to perform work in the UI thread and delivers
          * the result from doInBackground() */
-        protected void onPostExecute(String result) {
-
+        protected void onPostExecute(GetClimbingAreas result) {
+            //getArea_arr
+            showAreaMarkers();
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected GetClimbingAreas doInBackground(GetClimbingAreas... a) {
+            GetClimbingAreas _getclimbingarea = a[0];
             try {
                 InputStream json=getAssets().open("small.json");
-                GetClimbingAreas a = new GetClimbingAreas();
-                a.parseData(json);
+                _getclimbingarea.parseData(json);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return "sss";
+            return _getclimbingarea;
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.hanna.testapplication;
+package com.example.hanna.testapplication.model;
 
 /**
  * Created by hanna on 3/13/15.
